@@ -1,0 +1,87 @@
+# This is the sample of Jenkinsfile using Declarative Pipeline 
+
+# This can be used for automating the pipeline stages Build, Test and Deploy which is called as Continuous Deliver Pipeline
+
+# This JenkinsFile has to be located in the root directory of the project
+
+# To get this work we need to have the agent directive or else this pipeline will not work to checkput the source code which will fail the pipeline initial stage
+
+#NOTE: For all the sh in the text will be replaced with bat for all windows server machines
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building..'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying....'
+            }
+        }
+    }
+}
+
+# Following is the individual stage of Pipeline
+# By using this pipeline with JenkinsFile we dont need to use build tools such as maven, gradle etc., instead we can invoke it from the sh or .sh and .bat for the windows systems
+
+# Below is the First stage i.e., Build Stage in this Pipeline
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'make' (1)
+                archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true (2)
+            }
+        }
+    }
+}
+
+# Second stage of the pipeline is Test and is below
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Test') {
+            steps {
+                /* `make check` returns non-zero on test failures,
+                * using `true` to allow the Pipeline to continue nonetheless
+                */
+                sh 'make check || true' (1)
+                junit '**/target/*.xml' (2)
+            }
+        }
+    }
+}
+
+# Third Stage of the pipeline is Deploy and is below
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Deploy') {
+            when {
+              expression {
+                currentBuild.result == null || currentBuild.result == 'SUCCESS' (1)
+              }
+            }
+            steps {
+                sh 'make publish'
+            }
+        }
+    }
+}
+
