@@ -1,0 +1,30 @@
+# The purpose of this file is to define the services to run together and configuring the application services in a yaml file
+# For Example: Sonarqube, Jenkins,etc.,
+# Whenever we run docker compose up build, this will spin up the Jenkins container as well as the Sonarqube container by using one dockor-compose.yml file
+# We can define the port numbers, user level access in the yml file.
+# We have to run the docker compose up build in the directory of docker-compose.yml file
+
+version 3.2
+services:
+  sonarqube:
+    build:
+      context:sonarqube/
+     ports:
+      -9000:9000
+      -9092:9092
+     container_name: sonarqube
+  jenkins:
+    build:
+      context: jenkins/
+     privileged: true
+     user: root
+     ports:
+      -8080:8080
+      -50000:50000
+     container_name: jenkins
+     volumes:
+      -/tmp/jenkins:/var/jenkins_home
+      -/var/run/docker.sock:/var/run/docker.sock
+     depends_on:
+      -sonarqube
+     
