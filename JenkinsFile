@@ -6,7 +6,7 @@
 
 # To get this work we need to have the agent directive or else this pipeline will not work to checkput the source code which will fail the pipeline initial stage
 
-#NOTE: For all the sh in the text will be replaced with bat for all windows server machines
+# NOTE: For all the sh in the below context will be replaced with bat for all windows server machines
 
 pipeline {
     agent any
