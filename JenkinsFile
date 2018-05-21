@@ -1,6 +1,6 @@
 # This is the sample of Jenkinsfile using Declarative Pipeline 
 
-# This can be used for automating the pipeline stages Build, Test and Deploy which is called as Continuous Deliver Pipeline
+# This can be used for automating the pipeline stages Build, Test and Deploy
 
 # This JenkinsFile has to be located in the root directory of the project
 
